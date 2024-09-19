@@ -1,3 +1,9 @@
+"""
+Recipe Finder Application
+
+This application allows users to enter an ingredient and find recipes
+using the Spoonacular API.
+"""
 import streamlit as st
 from utils.api_utils import search_recipes
 
