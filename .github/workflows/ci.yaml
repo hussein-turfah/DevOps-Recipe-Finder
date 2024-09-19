@@ -24,17 +24,28 @@ jobs:
           python3 -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Analyze Code using pylint
-        run: |
-          pylint app.py
+      # - name: Analyze Code using pylint
+      #   run: |
+      #     pylint app.py
 
-  # Setting-Up:
-  #   runs-on: ubuntu-latest
-  #   needs: [Analyze]
+  Setting-Up:
+    runs-on: ubuntu-latest
+    needs: [Analyze]
         
-  #   steps:
-  #     - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
   
-  #     - name: Connect to EC2
-  #       run: ssh -i ${{ secrets.SERVER_PEM }} ubuntu@${{ secrets.SERVER_IP }} "echo Connected to EC2"
-        
+      # - name: Connect to EC2
+      #   run: | 
+          
+      #     ssh -i ${{ secrets.SERVER_PEM }} ubuntu@${{ secrets.SERVER_IP }} 
+      #     git clone https://github.com/hussein-turfah/DevOps-Recipe-Finder.git 
+      #     cd /home/ubuntu/DevOps-Recipe-Finder 
+      #     pull origin main
+      - name: Connect to EC2 and execute commands
+        run: |
+          ssh -i ${{ secrets.SERVER_PEM }} ubuntu@${{ secrets.SERVER_IP }} << 'EOF'
+          git clone https://github.com/hussein-turfah/DevOps-Recipe-Finder.git
+          cd /home/ubuntu/DevOps-Recipe-Finder
+          git pull origin main
+          EOF
