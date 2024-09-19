@@ -53,6 +53,6 @@ jobs:
             pip install -r requirements.txt
 
             # Run the Streamlit app
-            sudo streamlit run app.py --server.port 80
+            sudo /home/ubuntu/DevOps-Recipe-Finder/venv/bin/streamlit run app.py --server.port 80
           EOF
     
