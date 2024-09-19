@@ -34,17 +34,15 @@ jobs:
         
     steps:
       - uses: actions/checkout@v4
-  
-      # - name: Connect to EC2
-      #   run: | 
+
+      - name: Create PEM file
+        run: |
+          echo "${{ secrets.SERVER_PEM }}" > server-key.pem
+          chmod 400 server-key.pem  # Set permissions
           
-      #     ssh -i ${{ secrets.SERVER_PEM }} ubuntu@${{ secrets.SERVER_IP }} 
-      #     git clone https://github.com/hussein-turfah/DevOps-Recipe-Finder.git 
-      #     cd /home/ubuntu/DevOps-Recipe-Finder 
-      #     pull origin main
       - name: Connect to EC2 and execute commands
         run: |
-          ssh ${{ secrets.SERVER_PEM }} ubuntu@${{ secrets.SERVER_IP }} << 'EOF'
+          ssh -i server-key.pem ubuntu@${{ secrets.SERVER_IP }} << 'EOF'
           git clone https://github.com/hussein-turfah/DevOps-Recipe-Finder.git
           cd /home/ubuntu/DevOps-Recipe-Finder
           git pull origin main
