@@ -46,8 +46,8 @@ jobs:
           git clone https://github.com/hussein-turfah/DevOps-Recipe-Finder.git
           cd /home/ubuntu/DevOps-Recipe-Finder
           git pull origin main
-          
-          sudo apt install python3.12-venv
+
+          sudo apt install python3.12-venv -y
           python3 -m venv venv
           source venv/bin/activate
           pip install -r requirements.txt
