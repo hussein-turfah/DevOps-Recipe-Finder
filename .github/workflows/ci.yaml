@@ -31,26 +31,28 @@ jobs:
   Setting-Up:
     runs-on: ubuntu-latest
     needs: [Analyze]
-        
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Create PEM file
         run: |
           echo "${{ secrets.SERVER_PEM }}" > server-key.pem
-          chmod 400 server-key.pem  # Set permissions
+          chmod 400 server-key.pem  # Set correct permissions
 
-      - name: Connect to EC2 and execute commands
+      - name: Connect to EC2 and execute setup commands
         run: |
           ssh -o StrictHostKeyChecking=no -i server-key.pem ubuntu@${{ secrets.SERVER_IP }} << 'EOF'
-          git clone https://github.com/hussein-turfah/DevOps-Recipe-Finder.git
-          cd /home/ubuntu/DevOps-Recipe-Finder
-          git pull origin main
+            git clone https://github.com/hussein-turfah/DevOps-Recipe-Finder.git || true
+            cd /home/ubuntu/DevOps-Recipe-Finder
+            git pull origin main
 
-          sudo apt install python3.12-venv -y
-          python3 -m venv venv
-          source venv/bin/activate
-          pip install -r requirements.txt
-          
-          sudo streamlit run app.py --server.port 80
+            sudo apt-get update && sudo apt-get install python3.12-venv -y
+            python3 -m venv venv
+            source venv/bin/activate
+            pip install -r requirements.txt
+
+            # Run the Streamlit app
+            sudo streamlit run app.py --server.port 80
           EOF
+    
