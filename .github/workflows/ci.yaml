@@ -39,10 +39,10 @@ jobs:
         run: |
           echo "${{ secrets.SERVER_PEM }}" > server-key.pem
           chmod 400 server-key.pem  # Set permissions
-          
+
       - name: Connect to EC2 and execute commands
         run: |
-          ssh -i server-key.pem ubuntu@${{ secrets.SERVER_IP }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i server-key.pem ubuntu@${{ secrets.SERVER_IP }} << 'EOF'
           git clone https://github.com/hussein-turfah/DevOps-Recipe-Finder.git
           cd /home/ubuntu/DevOps-Recipe-Finder
           git pull origin main
