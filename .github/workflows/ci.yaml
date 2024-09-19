@@ -44,7 +44,7 @@ jobs:
       #     pull origin main
       - name: Connect to EC2 and execute commands
         run: |
-          ssh -i ${{ secrets.SERVER_PEM }} ubuntu@${{ secrets.SERVER_IP }} << 'EOF'
+          ssh ${{ secrets.SERVER_PEM }} ubuntu@${{ secrets.SERVER_IP }} << 'EOF'
           git clone https://github.com/hussein-turfah/DevOps-Recipe-Finder.git
           cd /home/ubuntu/DevOps-Recipe-Finder
           git pull origin main
