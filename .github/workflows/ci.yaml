@@ -24,9 +24,9 @@ jobs:
           python3 -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # - name: Analyze Code using pylint
-      #   run: |
-      #     pylint app.py
+      - name: Analyze Code using pylint
+        run: |
+          pylint app.py || exit 1
 
   Setting-Up:
     runs-on: ubuntu-latest
@@ -51,6 +51,12 @@ jobs:
             python3 -m venv venv
             source venv/bin/activate
             pip install -r requirements.txt
-            sudo /home/ubuntu/DevOps-Recipe-Finder/venv/bin/streamlit run app.py --server.port 80 &
           EOF
-    
+      
+      - name: Start Streamlit App
+        run: |
+          ssh -o StrictHostKeyChecking=no -i server-key.pem ubuntu@${{ secrets.SERVER_IP }} << 'EOF'
+            cd /home/ubuntu/DevOps-Recipe-Finder
+            nohup venv/bin/streamlit run app.py --server.port 80 > streamlit.log 2>&1 &
+          EOF
+          
