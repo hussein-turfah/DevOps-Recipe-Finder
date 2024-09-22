@@ -39,7 +39,8 @@ jobs:
         run: |
           if [[ "${{ github.event.head_commit.message }}" == *"No Deploy"* ]]; then
             echo "No Deploy keyword found in commit message. Exiting..."
-            exit 1  # Use exit 1 to indicate failure
+            # exit 1  # Use exit 1 to indicate failure
+            exit 0  # Use exit 0 to indicate success and avoid the failure of the workflow
           fi
 
       - name: Create PEM file
