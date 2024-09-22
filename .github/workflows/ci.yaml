@@ -40,7 +40,8 @@ jobs:
       - name: Check if commit message includes "No Deploy"
         id: check
         run: |
-          if [[ "${{ github.event.head_commit.message }}" == *"No Deploy"* ]]; then
+          COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
+          if [[ $COMMIT_MESSAGE == *"No Deploy"* ]]; then
             echo "No Deploy keyword found in commit message. Skipping deployment..."
             echo "::set-output name=should_deploy::false"
             exit 0
