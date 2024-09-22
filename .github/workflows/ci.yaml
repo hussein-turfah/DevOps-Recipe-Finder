@@ -35,6 +35,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check if commit message includes "No Deploy" and exit if true
+        run: |
+          if [[ "${{ github.event.head_commit.message }}" == *"No Deploy"* ]]; then
+            echo "No Deploy keyword found in commit message. Exiting..."
+            exit 1  # Use exit 1 to indicate failure
+          fi
+
       - name: Create PEM file
         run: |
           echo "${{ secrets.SERVER_PEM }}" > server-key.pem
