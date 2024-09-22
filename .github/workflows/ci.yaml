@@ -28,25 +28,37 @@ jobs:
         run: |
           pylint app.py || exit 1
 
-  Setting-Up:
+  Check-Commit-Message:
     runs-on: ubuntu-latest
     needs: [Analyze]
 
+    outputs:
+      should_deploy: ${{ steps.check.outputs.should_deploy }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: Check if commit message includes "No Deploy" and exit if true
+      - name: Check if commit message includes "No Deploy"
+        id: check
         run: |
           if [[ "${{ github.event.head_commit.message }}" == *"No Deploy"* ]]; then
-            echo "No Deploy keyword found in commit message. Exiting..."
-            # exit 1  # Use exit 1 to indicate failure
-            exit 0  # Use exit 0 to indicate success and avoid the failure of the workflow
+            echo "No Deploy keyword found in commit message. Skipping deployment..."
+            echo "::set-output name=should_deploy::false"
+            exit 0
+          else
+            echo "::set-output name=should_deploy::true"
           fi
 
+  Setting-Up:
+    runs-on: ubuntu-latest
+    needs: [Analyze, Check-Commit-Message]
+    
+    if: needs.Check-Commit-Message.outputs.should_deploy == 'true'
+    steps:
+      - uses: actions/checkout@v4
       - name: Create PEM file
         run: |
           echo "${{ secrets.SERVER_PEM }}" > server-key.pem
-          chmod 400 server-key.pem  # Set correct permissions
+          chmod 400 server-key.pem
 
       - name: Connect to EC2 and execute setup commands
         run: |
