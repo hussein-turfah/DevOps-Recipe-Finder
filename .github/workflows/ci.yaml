@@ -43,10 +43,10 @@ jobs:
           COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
           if [[ $COMMIT_MESSAGE == *"No Deploy"* ]]; then
             echo "No Deploy keyword found in commit message. Skipping deployment..."
-            echo "::set-output name=should_deploy::false"
+            echo "should_deploy=false"
             exit 0
           else
-            echo "::set-output name=should_deploy::true"
+            echo "should_deploy=true"
           fi
 
   Setting-Up:
